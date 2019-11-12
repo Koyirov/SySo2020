@@ -1,0 +1,27 @@
+#!/bin/busybox sh
+#init
+
+#Setup the directory layout
+busybox mkdir proc
+busybox mkdir proc/sys
+busybox mkdir usr
+busybox mkdir sys
+busybox mkdir tmp
+busybox mkdir sbin
+
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+
+busybox clear
+
+# install busybox applets as Symlinks
+/bin/busybox --install -s
+
+# mount the fseseses
+mount -t devtmpfs none /dev
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t tmpfs none /tmp
+
+./bin/sysinfo
+
+bash

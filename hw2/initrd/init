@@ -1,0 +1,48 @@
+#!/bin/busybox sh
+#init
+
+#Setup the directory layout
+busybox mkdir proc
+busybox mkdir proc/sys
+busybox mkdir usr
+busybox mkdir sys
+busybox mkdir tmp
+busybox mkdir sbin
+
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export LD_LIBRARY_PATH=/lib/
+
+busybox clear
+
+# install busybox applets as Symlinks
+/bin/busybox --install -s
+
+# mount the fseseses
+mount -t devtmpfs none /dev
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t tmpfs none /tmp
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts
+./bin/sysinfo
+
+# prepare key access rights because i'm not root anywhere else
+chown -R root:root root/
+chown -R root:root /etc
+chown root:root /
+chown root:root /*
+chmod 700 /etc
+chmod 700 /etc/dropbear
+chmod 600 /etc/dropbear/*
+chmod 600 /root/.ssh/*
+chmod 755 /lib/libnss_files.so.2
+
+#dropbear
+ifconfig lo 127.0.0.1
+ifconfig eth0 up
+udhcpc -v -i eth0 -s /etc/udhcpc/simple.script
+
+dropbearmulti dropbear -sg
+
+
+bash

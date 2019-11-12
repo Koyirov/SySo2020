@@ -1,0 +1,11 @@
+git clone https://github.com/MisterShoh/syso-ws18-syso-ws18-grp15.git
+git checkout -b hw0
+git push
+git checkout -b hw0-MisterShoh
+git push --set-upstream origin hw0-MisterShoh
+
+sed -i s/Results/grp15/g README.md
+
+mkdir hw0
+touch hw0/MisterShoh.log
+
